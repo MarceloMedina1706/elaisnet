@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8">
+	<div th:replace="componentes/estilo.html"></div>
+	<title>ElaisNet - Verificación</title>
+
+</head>
+<body class="bg-page">
+	
+	<div class="container">
+		<div class="row mt-5 d-flex justify-content-center">
+			<div class="col-4 mt-4 div-img">
+				<img src="img/logo2.png" class="img-logo">
+			</div>
+		</div>
+		<div th:if="${expired}" class="row">
+			<div class="col text-center">
+				<p class="text-dark fs-4 fw-bold">
+					El token:
+				</p>
+				<p class="text-dark fs-4" th:text="${token}"></p>
+				<p class="text-dark fs-4 fw-bold">
+					expiró.
+				</p>
+				<div th:if="${registro}">
+					<a class="text-decoration-none mt-3" th:href="'/reenviarToken?token='+${token}">
+						<button class="btn btn-info text-white">Reenviar token</button>
+					</a>
+				</div>
+				
+			</div>
+		</div>
+		<div th:if="${nulo}" class="row">
+			<div class="col d-flex justify-content-center">
+				<p class="text-dark fs-4 fw-bold" th:text="${message}"></p>
+			</div>
+		</div>
+	</div>
+	
+	<div th:replace="componentes/script.html"></div>
+
+</body>
+</html>

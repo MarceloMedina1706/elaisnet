@@ -1,0 +1,95 @@
+		.bg-page{
+			background-color: rgba(243, 147, 124, 0.1);
+		}
+
+		.mt-c{
+			margin-top: 10%;
+		}
+
+		.mt-c2{
+			margin-top: 6%;
+		}
+
+		.img-logo{
+			width: 100%;
+			margin-left: 0;
+		}
+		
+		.rounded-cus{
+			border-radius: .5em;
+		}
+
+		.btn-login{
+			background-color: rgb(247, 103, 48);
+			font-weight: 600;
+		}
+
+		.btn-login:hover{
+			background-color: rgb(232, 103, 54);
+		}
+
+		.div-img{
+			width: 40%;
+		}
+
+		.div-olv{
+			border-bottom: solid;
+		}
+
+		.a-olv{
+			text-decoration: none;
+		}
+
+		.a-olv:hover{
+			text-decoration: underline;
+		}
+
+		.btn-crear{
+			background-color: rgb(63, 188, 59);
+			font-weight: 600;
+			border-radius: .5em;
+		}
+
+		.btn-crear:hover{
+			background-color: rgb(60, 156, 57);
+		}
+
+		.p-pre{
+			font-size: 1.5em;
+			font-weight: 600;
+			position: relative;
+			margin-top: -15%;
+			margin-left: 15%;
+		}
+
+		.radio-genero{
+			width: 30%;
+		}
+		
+		.img-verificacion{
+			width: 20%;
+		}
+		
+		.btn-gray{
+			background-color: #e4e6eb;
+		}
+		
+		.bg-nav{
+			background-color: rgb(247, 103, 48);
+		}
+
+		.w-40{
+			width: 40%;
+		}
+
+		.img-perfil{
+			width: 15%;
+		}
+		
+		.w-10{
+            width: 10%;;
+        }
+
+        .rounded-1em{
+            border-radius: 1em;
+        }

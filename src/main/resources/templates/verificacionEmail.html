@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8">
+	<div th:replace="componentes/estilo.html"></div>
+	<title>ElaisNet - Verificación</title>
+
+</head>
+<body class="bg-page">
+	
+	<div class="container">
+		<div class="row mt-5 d-flex justify-content-center">
+			<div class="col-4 mt-4 div-img">
+					<img src="img/logo2.png" class="img-logo">
+				</div>
+				
+			</div>
+			
+		</div>
+		<div class="row">
+			<div class="col d-flex justify-content-center">
+				<p class="text-dark fs-4 fw-bold" th:text="${mensaje}">
+				</p>
+			</div>
+		</div>
+		
+		<div class="row d-flex justify-content-center mt-c">
+			<a th:href="@{/index}" class="btn btn-crear w-25 text-white">
+				Login
+			</a>
+		</div>
+	</div>
+	
+	<div th:replace="componentes/script.html"></div>
+
+</body>
+</html>

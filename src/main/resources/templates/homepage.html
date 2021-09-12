@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8">
+	<div th:replace="componentes/estilo.html"></div>
+	<title>ElaisNet - Homepage</title>
+
+</head>
+<body class="bg-page">
+
+	<div th:replace="componentes/nav.html"></div>
+	
+    <div class="d-flex justify-content-center mt-c2">
+        <div class="rounded-cus shadow w-50 mt-3 d-flex justify-content-center">
+            <div class="p-3 d-flex justify-content-center">
+                <img th:src="${profilePicture}" class="img-perfil">
+                <div class="w-75">
+                    <div class="d-flex align-self-center">
+                       <input type="text" placeholder="¿Qué estás pensando?" class="form-control rounded-pill p-2 mt-auto ms-3 fs-5" id="post" autocomplete="off"> 
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <input type="file" class="btn btn-success ms-3 mt-2 w-40" id="img" value="Foto">
+                    	<button class="btn btn-danger ms-3 mt-2 w-40" id="publicar">Publicar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="divAux"></div>
+    <div class="d-flex justify-content-center mb-2" th:each="post : ${posts}">
+        <div class="rounded-cus shadow w-50 mt-3" th:attr="data-idPost=${post.getIdPost()}">
+            <div class="d-flex justify-content-center">
+                <div class="p-3 d-flex justify-content-center">
+                    <img th:src="${post.getIdUser().getProfilePicture()}" class="w-25">
+                   <div class="w-40 ms-3">
+                       <div class="d-flex align-self-center ms-4">
+                          <a th:href="@{'/user/'+${post.getIdUser().getIdUser()}}" class="text-decoration-none text-dark">
+                          	<p class="fs-4" th:text="${post.getIdUser().getName()}+' '+${post.getIdUser().getLastName()}"></p>
+                          </a> 
+                       </div>
+                       <div class="ms-4">
+                           <p class="fs-5" th:text="${post.fecha}"></p>
+                       </div>
+                   </div>
+                   <div th:if="${post.getIdUser().getIdUser()} == ${myId}">
+                   		<div class="nav-item dropdown">
+						    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false"></a>
+						    <ul class="dropdown-menu">
+						      <li><a class="dropdown-item" th:attr="data-idPost=${post.getIdPost()}">Editar</a></li>
+						      <li><a class="dropdown-item" th:attr="data-idPost=${post.getIdPost()}">Eliminar</a></li>
+						    </ul>
+						 </div>
+                   </div>
+               </div>
+            </div>
+            <div class="px-4 mb-2 border-bottom">
+                <p class="fs-5 text-center text-break" th:text="${post.contenido}"></p>
+                <div class="d-flex justify-content-center" th:if="(${post.foto} != null)">
+                    <img th:src="'/img/'+${post.getIdUser().getEmail()}+'/'+${post.foto}" class="w-75">
+                </div>
+            </div>
+            <div class="d-flex px-3 mb-2">
+            	<button class="btn btn-outline-dark w-50 fs-5 shadow-none" th:attr="data-idPost=${post.getIdPost()}">
+					Me gusta <span th:text=${#lists.size(post.getLikesPost())} class=""></span>
+				</button>
+	            <button class="btn btn-outline-danger w-50 fs-5 shadow-none" th:attr="data-idPost=${post.getIdPost()}">Comentar</button>
+            </div>
+            <div class="px-3">
+                <button class="btn btn-outline-primary w-100 shadow-none" th:attr="data-idPost=${post.getIdPost()}">
+                    Ver comentarios
+                </button>
+            </div>
+            <div class="overflow-auto" th:attr="data-idPost=${post.getIdPost()}"><!-- COMIENZO COMENTARIOS========================================================-->
+                <div class="collapse" th:attr="data-idPost=${post.getIdPost()}">
+                    <div class="card card-body" th:each="comentario : ${post.getComentarios()}">
+                        <div class="bg-warning p-4 rounded-1em">
+                            <div class="d-flex align-items-end">
+                                <img th:src="${comentario.getIdUser().getProfilePicture()}" class="w-10 ">
+                                <span th:text="${comentario.getIdUser().getName()} + ' ' + ${comentario.getIdUser().getLastName()}" class="fs-4 text-end mx-3"></span>
+                                <small th:text="${comentario.fechaComentario}"></small>
+                            </div>
+                            <div class="border-top mt-2 p-2">
+                                <p th:text="${comentario.comentario}"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- FIN COMENTARIOS========================================================-->
+        </div>
+    </div>
+    
+    <!--======== M O D A L   C O M E N T A R I O =======================================================================================-->
+	
+	<div class="modal fade" id="modalComentario" aria-labelledby="modalLabel2" aria-hidden="true">
+			  <div class="modal-dialog">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <h5 class="modal-title" id="modalLabel2">Comentario.</h5>
+			        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			      </div>
+			      <div class="modal-body">
+			      		<textarea class="form-control" placeholder="Deja un comentario aqui" id="comentario" style="resize: none;"></textarea>
+			      </div>
+			      <div class="modal-footer">
+			        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+			        <button class="btn btn-success" id="guardarComentario">Guardar</button>
+			      </div>
+			    </div>
+			  </div>
+			</div>
+	<!--======== F I N   M O D A L   C O M E N T A R I O =======================================================================================-->	
+	<!--======== M O D A L   E D I T A R   P O S T =======================================================================================-->
+	
+	<div class="modal fade" id="modalEditarPost" aria-labelledby="modalLabel3" aria-hidden="true">
+			  <div class="modal-dialog">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <h5 class="modal-title" id="modalLabel3">Editar post.</h5>
+			        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			      </div>
+			      <div class="modal-body">
+			      		<textarea class="form-control" id="contenidoEditar" style="resize: none;"></textarea>
+			      		<div id="divFoto" class="mt-3 d-flex justify-content-center"></div>
+			      </div>
+			      <div class="modal-footer">
+			        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+			        <button class="btn btn-success" id="guardarModificacion">Guardar</button>
+			      </div>
+			    </div>
+			  </div>
+			</div>
+	<!--======== F I N   M O D A L   E D I T A R   P O S T =======================================================================================-->	
+
+	
+	<div th:replace="componentes/script.html"></div>
+	<script type="text/javascript" th:src="@{/js/homepage.js}"></script>
+</body>
+</html>

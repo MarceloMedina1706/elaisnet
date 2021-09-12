@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<div th:replace="componentes/estilo.html"></div>
+	<title>ElaisNet - Registrarte</title>
+</head>
+<body class="bg-page">
+
+	<div class="container mt-3">
+		<div class="row p-3 text-center border-bottom">
+			<h1>Registrarte</h1>	
+		</div>
+	</div>
+	<div class="d-flex justify-content-center">
+		<form th:action="@{/registrarte}" th:method="POST" th:object="${userDto}" id="formularioRegistro">
+			<div class="container">
+				<div class="row mt-4">
+					<div class="col-6">
+						<span class="fs-6" id="sName"></span>
+					</div>
+					<div class="col-6">
+						<span class="fs-6" id="sLastName"></span>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-6">
+						<input th:field="*{name}" class="form-control shadow-none" type="text" placeholder="Nombre" id="name">
+					</div>
+					<div class="col-6">
+						<input th:field="*{lastName}" class="form-control shadow-none" type="text" placeholder="Apellido" id="lastName">
+					</div>
+				</div>
+				<div class="row mt-3">
+					<div class="col">
+						<span class="fs-6" id="sEmail"></span>
+						<input th:field="*{email}" type="email" class="form-control shadow-none" placeholder="Correo electrónico" id="email">
+					</div>
+				</div>
+				<div class="row mt-3">
+					<div class="col">
+						<span class="fs-6" id="sPassword"></span>
+						<input th:field="*{password}" type="password" class="form-control shadow-none" placeholder="Contraseña" id="password">
+					</div>
+				</div>
+				<div class="row mt-3">
+					<div class="col">
+						<input th:field="*{matchingPassword}" type="password" class="form-control shadow-none" placeholder="Confirmar contraseña">
+					</div>
+				</div>
+				<div class="row mt-3">
+					<div class="col">
+						<span class="fs-6" id="sBorn"></span>	
+						<span class="fs-6">Fecha de nacimiento</span>
+						<input th:field="*{born}" type="date" class="form-control shadow-none" id="born" name="born">
+					</div>
+				</div>
+				<div class="row mt-3">
+					<span class="fs-6" id="sSex"></span>
+					<span class="fs-6">Sexo</span>
+					<div id="divOpciones" class="d-flex justify-content-between">
+						<input type="radio" name="genero" id="hombre" value="Hombre" class="btn-check">
+						<label class="btn btn-outline-danger radio-genero" for="hombre">Hombre</label>
+		                
+		                <input type="radio" name="genero" id="mujer" value="Mujer" class="btn-check">
+						<label class="btn btn-outline-danger radio-genero" for="mujer">Mujer</label>
+						
+		                <input type="radio" name="genero" id="otro" value="Otro" class="btn-check">
+		                <label class="btn btn-outline-danger radio-genero" for="otro">Otro</label>
+		            </div>
+				</div>
+				<div class="row mt-5 d-flex justify-content-center">
+					<a id="login" th:href="@{/index}" class="col-4 btn btn-info text-white w-25 shadow-none me-3 rounded-cus">
+						Login
+					</a>					
+					<input type="submit" id="boton" class="col-4 btn btn-crear text-white w-50 shadow-none" value="Registrarte">
+										
+				</div>
+			</div>
+		</form>
+	</div>
+	
+	<div th:replace="componentes/script.html"></div>
+	<script type="text/javascript" th:src="@{/js/jquery.validate.js}"></script>
+	<script type="text/javascript" th:src="@{/js/additional-methods.js}"></script>
+	
+	<script type="text/javascript">
+	
+		$(document).ready(function(){
+			
+			jQuery.validator.addMethod("menorQue", 
+	        function(value, element) {
+	            
+	            return new Date(value) < new Date();  
+	        });
+			
+			$("#formularioRegistro").validate({
+				rules: {
+					born: {
+						menorQue: true
+					}
+				},
+				
+				messages: {
+					born:{
+						menorQue: "Por favor, introduce una fecha válida."
+					}
+				}
+			});
+			
+			$("#formularioRegistro").submit(function(){
+				
+				/*alert("name: "+$("#name").val()+"\nlastName: "+$("#lastName").val()+"\nemail: "+$("#email").val()+"\npassword: "+$("#password").val()
+					
+					+ "\nmatchingPassword: "+$("#matchingPassword").val()+
+					
+					"\nborn: "+$("#born").val()+
+					
+					"\nsexo: "+$("#divOpciones input:radio[name=genero]:checked").val() );*/
+				
+				if(! $("#formularioRegistro").valid()) return false;
+				
+				limpiarSInput();
+				
+				//$("#boton").prop("disabled", true);
+				
+				$("#boton").hide();
+				
+				$("#login").hide();
+				
+				$("#boton").after("<div class='spinner-border text-danger' role='status'><span class='visually-hidden'>Loading...</span></div>");
+				
+				var userDto = {
+					
+					name : $("#name").val(),
+					
+					lastName : $("#lastName").val(),
+					
+					email : $("#email").val(),
+					
+					password : $("#password").val(),
+					
+					matchingPassword : $("#matchingPassword").val(),
+					
+					born : $("#born").val(),
+					
+					sex : $("#divOpciones input:radio[name=genero]:checked").val()
+				}
+				$.ajax({
+					type : "POST",
+					dataType : 'json',
+					contentType : "application/json;charset=utf-8",
+					url : "/registrarte",
+					data : JSON.stringify(userDto),
+					success : function(result) {
+						//console.log(result);
+						var i=0;
+						
+						while(result[i] != null){
+							
+							if(result[i].error == "no-error"){
+								
+								window.location.href = "/verificarEmail";
+							}
+							
+							if(result[i].error == "name"){
+								
+								$("#sName").text(result[i].mensaje);
+								
+								$("#name").addClass("border-danger");
+								
+							} 
+							
+							if(result[i].error == "lastName"){
+								
+								$("#sLastName").text(result[i].mensaje);
+								
+								$("#lastName").addClass("border-danger");
+								
+							}
+							
+							if(result[i].error == "email"){
+								
+								$("#sEmail").text(result[i].mensaje);
+								
+								$("#email").addClass("border-danger");
+								
+							}
+							
+							if(result[i].error == "password"){
+								
+								$("#password").addClass("border-danger");
+								
+								if((result[i].mensaje == "empty") || (result[i].mensaje == "nulo")){
+									
+									$("#sPassword").text("Ingrese una contraseña");
+								}else{
+									
+									$("#sPassword").text(result[i].mensaje);
+									
+									$("#matchingPassword").addClass("border-danger");
+								}	
+							}
+							
+							if(result[i].error == "born"){
+								
+								$("#sBorn").text("Seleccione una fecha").css("display:block;");
+								
+								$("#born").addClass("border-danger");
+								
+							}
+							
+							if(result[i].error == "sex"){
+								
+								$("#sSex").text("Seleccione una opción");
+								
+								$("#divSex").addClass("border-danger");
+								
+							}
+							
+							i++;
+							
+							$(".spinner-border").remove();
+							$("#boton").show();
+							$("#login").show();
+						}
+						
+					 },
+					error : function(e) { alert("Error!"); }
+				});		
+				
+				
+				
+				return false;
+			});
+			
+			function limpiarSInput(){				
+				
+				if($("#sName").text() != ""){
+								
+					$("#sName").text("");
+									
+					$("#name").removeClass("border-danger");
+				}
+				
+				if($("#sLastName").text() != ""){
+								
+					$("#sLastName").text("");
+					
+					$("#lastName").removeClass("border-danger");		
+				}
+				
+				if($("#sEmail").text() != ""){
+								
+					$("#sEmail").text("");
+									
+					$("#email").removeClass("border-danger");
+				}
+				
+				if($("#sPassword").text() != ""){
+								
+					$("#sPassword").text("");
+					
+					$("#password").removeClass("border-danger");
+					
+					$("#matchingPassword.border-danger").removeClass("border-danger");		
+				}
+				
+				if($("#sBorn").text() != ""){
+								
+					$("#sBorn").text("");
+					
+					$("#born").removeClass("border-danger");		
+				}
+				
+				
+			}
+			
+		});
+	
+	</script>
+
+</body>
+</html>

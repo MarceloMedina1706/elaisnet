@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<div th:replace="componentes/estilo.html"></div>
+	<title>ElaisNet - Inicia sesión</title>
+
+</head>
+<body class="bg-page">
+
+	<div class="mt-c">
+		<div class="container">
+			<div class="row">
+				<div class="col-4 mt-4 div-img">
+					<img src="img/logo2.png" class="img-logo">
+					<p class="p-pre">
+						ElaisNet te ayuda a comunicarte y compartir con las personas que forman parte de tu vida.
+					</p>
+				</div>
+				<div class="col-5 offset-2">
+					<div class="bg-white w-100 p-3 rounded-cus shadow">
+			            <div th:if="${param.userNull}" class="alert alert-danger alert-dismissible fade show">
+							Credenciales Erróneas
+							<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+						</div>
+			            
+						<form th:method="POST">
+							<input type="email" class="form-control p-3" id="email" name="email" placeholder="Correo electrónico" autocomplete="off">
+							<input type="password" class="form-control mt-3 p-3" id="password" name="password" placeholder="Contraseña">
+							<input type="submit" class="btn btn-login text-white mt-3 p-2 w-100 fs-4" value="Iniciar sesión">
+						</form>
+
+						<div class="text-center mt-1 p-3 border-bottom">
+							<a th:href="@{/recuperarCuenta}" class="a-olv">¿Olvidaste tu contraseña?</a>
+						</div>
+
+						<div class="d-flex justify-content-center mt-3">
+							<a th:href="@{/registrarte}">
+								<button class="btn btn-crear text-white p-3">
+									Crear cuenta nueva
+								</button>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div th:replace="componentes/script.html"></div>
+
+</body>
+</html>

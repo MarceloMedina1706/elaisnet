@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8">
+	<div th:replace="componentes/estilo.html"></div>
+	<title>ElaisNet - Búsqueda</title>
+    
+</head>
+<body class="bg-page">
+    
+    <div th:replace="componentes/nav.html"></div>
+	
+	<div th:if="${empty}" class="mt-c2">
+		<p>No hay resultados</p>
+	</div>
+	
+	<div class="mt-c2" th:each="resultado : ${resultados}">
+		<div class='fs-4 mt-1 p-1 d-flex justify-content-center'>
+			<div class="rounded-cus shadow w-50 p-4">
+				<img th:src="${resultado.getProfilePicture()}" class="w-10">
+				<a th:href="@{'/user/'+${resultado.getIdUser()}}" th:text="${resultado.name}+' '+${resultado.lastName}" class="text-decoration-none text-dark"></a>
+			</div>
+		</div>
+	
+	</div>
+	
+	<div th:replace="componentes/script.html"></div>
+	
+</body>
+</html>

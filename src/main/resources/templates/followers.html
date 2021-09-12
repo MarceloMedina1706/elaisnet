@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8">
+	<div th:replace="componentes/estilo.html"></div>
+	<title>ElaisNet - Perfil</title>
+    
+</head>
+<body class="bg-page">
+    
+    <div th:replace="componentes/nav.html"></div>
+
+    <div class="d-flex justify-content-center">
+        <div class="rounded-cus shadow w-75 mt-c2">
+            <div class="p-4">
+                <div class="d-flex justify-content-center">
+                    <img th:src="${profilePicture}" class="w-25">
+                </div>
+                
+                <p class="fs-2 text-center" th:text="${username}"></p>
+            </div>
+
+            <nav style="--bs-breadcrumb-divider: '';" aria-label="breadcrumb" class=" d-flex justify-content-center">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <p class="fs-4 text-decoration-none ms-3">Amigos</p>
+                    </li>
+                </ol>
+            </nav>
+
+        </div>
+    </div>
+    
+    <div class="d-flex justify-content-center">
+        <div class="rounded-cus shadow w-75 p-3">
+            <ul class="nav nav-tabs justify-content-center">
+			  <li class="nav-item">
+			    <a class="nav-link text-decoration-none text-dark fs-4" href="#" id="seguidores">Seguidores</a>
+			  </li>
+			  <li class="nav-item">
+			    <a class="nav-link text-decoration-none text-dark fs-4" href="#" id="seguidos">Seguidos</a>
+			  </li>
+			</ul>
+			
+			<div id="div-aux"></div>
+			
+        </div>
+    </div>
+	
+	
+	<div th:replace="componentes/script.html"></div>
+	<script>
+		$(document).ready(function(){
+			$("#seguidores").click(function(){
+				
+				if($("#seguidos").hasClass("active")) $("#seguidos").removeClass("active");
+				
+				$("#seguidores").addClass("active");
+				
+				//$("#div-aux").html("<p class='fs-4 bg-warning mt-1'>Seguidores</p>");
+				
+				$.post("/buscarFollow", {tipo : 0}, function(d){
+					
+					$("#div-aux").html(d);
+				})
+				
+				return false
+			});
+			
+			$("#seguidos").click(function(){
+				
+				if($("#seguidores").hasClass("active")) $("#seguidores").removeClass("active");
+				
+				$("#seguidos").addClass("active");
+				
+				$.post("/buscarFollow", {tipo : 1}, function(d){
+					$("#div-aux").html(d);
+				});
+				
+				return false
+			});
+			
+			$(document).on("click", "#div-aux a", function(){
+				
+				location.href = "/user/"+$(this).attr("data-idUser");
+				
+				return false;
+			});
+		});
+	
+	</script>
+	
+</body>
+</html>
